@@ -2,6 +2,7 @@
 using EstudiantesRepository.DBModels;
 using EstudiantesRepository.Entities;
 using EstudiantesRepository.Repositories.Base;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace EstudiantesRepository.Repositories.Estudiantes
 {
@@ -11,7 +12,7 @@ namespace EstudiantesRepository.Repositories.Estudiantes
      * */
     public class EstudianteRepository : BaseRepository, IEstudianteRepository
     {
-        public EstudianteRepository(DomainDbContext domainContext) : base(domainContext)
+        public EstudianteRepository(DomainDbContext domainContext, IMemoryCache memoryCache) : base(domainContext, memoryCache)
         {
         }
 
@@ -29,13 +30,15 @@ namespace EstudiantesRepository.Repositories.Estudiantes
 
         public Task<IEnumerable<ProvinciaConMasEstudiantesResult>> GetProvinciaConMasEstudiantesByCurso(int idCurso)
         {
-            var parameters = new List<SQLParam>();
-            parameters.Add(new SQLParam
+            var parameters = new List<SQLParam>
             {
-                ParamName = "@IdCurso",
-                ParamType = System.Data.DbType.Int64,
-                ParamValue = idCurso
-            });
+                new SQLParam
+                {
+                    ParamName = "@IdCurso",
+                    ParamType = System.Data.DbType.Int64,
+                    ParamValue = idCurso
+                }
+            };
             return RawSqlQuery(
                 "ProvinciaConMasEstudiantes",
                 x => new ProvinciaConMasEstudiantesResult

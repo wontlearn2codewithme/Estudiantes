@@ -1,4 +1,5 @@
 ﻿using Estudiantes.Models;
+using EstudiantesRepository.Repositories.Usuario;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -14,19 +15,22 @@ namespace Estudiantes.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public AuthController(IConfiguration configuration)
+        private readonly IUsuarioRepository _usuarioRepository;
+        public AuthController(IConfiguration configuration, IUsuarioRepository usuarioRepository)
         {
             _configuration = configuration;
+            _usuarioRepository = usuarioRepository;
         }
         [HttpPost, Route("login")]
         [AllowAnonymous]
-        public IActionResult Index(LoginRequest loginRequest)
+        public async Task<IActionResult> Index(LoginRequest loginRequest)
         {
             if (loginRequest == null || string.IsNullOrWhiteSpace(loginRequest.UserName) || string.IsNullOrWhiteSpace(loginRequest.Password))
             {
                 return BadRequest("Must provide username and password");
             }
-            if (loginRequest.UserName == "test" && loginRequest.Password == "test")
+            
+            if (await _usuarioRepository.UsuarioExiste(loginRequest.UserName, loginRequest.Password))
             {
                 var _symmetricSecurityKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(_configuration["JWT:SecretKey"])
@@ -52,17 +56,6 @@ namespace Estudiantes.Controllers
                 );
                 string token = new JwtSecurityTokenHandler().WriteToken(_Token);
                 return Ok(token);
-                //var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SecretKey"]));
-                //var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-                //var tokenOptions = new JwtSecurityToken(
-                //    issuer: _configuration["JWT:ISsuer"],
-                //    audience: _configuration["JWT:Audience"],
-                //    claims: new List<Claim>(),
-                //    expires: DateTime.Now.AddMinutes(5),
-                //    signingCredentials: signinCredentials
-                //);
-                //var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-                //return Ok(new { Token = tokenString });
             }
             else
             {

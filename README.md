@@ -6,7 +6,7 @@ Esta solución consta de tres proyectos implementando una arquitectura de domini
 - EstudiantesRepository: Proyecto de acceso a la base de datos
 - EstudiantesService: Proyecto en el que se aplica la lógica de negocio
 
-Para la autenticación mediante JWT hay que usar el usuario y contraseña test.
+La autenticación en la aplicación se basa en autenticación JWT mediante usuario y contraseña. Estos se han de especificar en el método login de AuthController. El usuario predefinido es test y la contraseña es test. Una vez hecha esta petición como respuesta obtendremos un token que deberemos insertar en la pestaña de autorización de swagger, añadiendo la palabra Bearer delante.
 
 El fichero script.sql es para la generación de base de datos.
 

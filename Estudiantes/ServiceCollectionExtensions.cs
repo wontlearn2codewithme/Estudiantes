@@ -1,5 +1,6 @@
 ﻿using EstudiantesRepository.Context;
 using EstudiantesRepository.Repositories.Estudiantes;
+using EstudiantesRepository.Repositories.Usuario;
 using EstudiantesService.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ namespace Estudiantes
         public static IServiceCollection ConfigureRepositories(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IEstudianteRepository, EstudianteRepository>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             return services;
         }
         
