@@ -19,3 +19,4 @@ El método del controlador GetNumEstudiantesPorDocente es para ejecutar el ejerc
 Se ha usado el sistema DBFirst para obtener las entidades del proyecto. El comando ejecutado es el siguiente:
 dotnet ef dbcontext scaffold "Server=ALC-CSYF1F3\DESARROLLO;Initial Catalog=Estudiantes;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -o Entities -f -c DomainDbContext --context-dir Context --use-database-names --project EstudiantesRepository --schema dbo --no-pluralize
 
+El fichero script.sql es el fichero que genera la base de datos con datos de ejemplo incluidos. Para ejecutar el proyecto se deberá cambiar la cadena de conexión en los appsettings para que utilice la base de datos local en la que hayamos ejecutado el script que la genera.
